@@ -136,9 +136,15 @@ else:
 install_requires = ['numpy', 'cython']
 tests_require = ['pytest', 'matplotlib']
 
-with open('dtaidistance/__init__.py', 'r', encoding='utf-8') as fd:
-    version = re.search(r'^__version__\s*=\s*[\'"]([^\'"]*)[\'"]',
-                        fd.read(), re.MULTILINE).group(1)
+try:
+    with open('dtaidistance/__init__.py', 'r', encoding='utf-8') as fd:
+        version = re.search(r'^__version__\s*=\s*[\'"]([^\'"]*)[\'"]',
+                            fd.read(), re.MULTILINE).group(1)
+except TypeError:
+    from io import open
+    with open('dtaidistance/__init__.py', 'r', encoding='utf-8') as fd:
+        version = re.search(r'^__version__\s*=\s*[\'"]([^\'"]*)[\'"]',
+                            fd.read(), re.MULTILINE).group(1)
 if not version:
     raise RuntimeError('Cannot find version information')
 
