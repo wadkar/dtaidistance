@@ -8,6 +8,10 @@ from setuptools.extension import Extension
 from setuptools.command.test import test as TestCommand
 from setuptools.command.sdist import sdist as SDistCommand
 from setuptools.command.build_ext import build_ext as BuildExtCommand
+# io.open is an alias to open()
+# See: https://docs.python.org/3.5/library/io.html#io.open
+# Provides python2.7 support
+from io import open
 import platform
 import os
 import sys
@@ -136,15 +140,9 @@ else:
 install_requires = ['numpy', 'cython']
 tests_require = ['pytest', 'matplotlib']
 
-try:
-    with open('dtaidistance/__init__.py', 'r', encoding='utf-8') as fd:
-        version = re.search(r'^__version__\s*=\s*[\'"]([^\'"]*)[\'"]',
-                            fd.read(), re.MULTILINE).group(1)
-except TypeError:
-    from io import open
-    with open('dtaidistance/__init__.py', 'r', encoding='utf-8') as fd:
-        version = re.search(r'^__version__\s*=\s*[\'"]([^\'"]*)[\'"]',
-                            fd.read(), re.MULTILINE).group(1)
+with open('dtaidistance/__init__.py', 'r', encoding='utf-8') as fd:
+    version = re.search(r'^__version__\s*=\s*[\'"]([^\'"]*)[\'"]',
+                        fd.read(), re.MULTILINE).group(1)
 if not version:
     raise RuntimeError('Cannot find version information')
 
